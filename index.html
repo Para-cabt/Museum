@@ -8,6 +8,70 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
+  async function fetchGitHubData(station) {
+  try {
+
+    const response = await fetch("./stations/stations.json");
+
+    if (!response.ok) {
+      throw new Error("Unable to load station data");
+    }
+
+    const stations = await response.json();
+
+    const data = stations.find(
+      s => s.id === station.id
+    );
+
+    if (!data) {
+      throw new Error("Station not found");
+    }
+
+    modalBody.innerHTML = `
+      <h2>
+        <span
+          class="modal-color-accent"
+          style="background-color:${station.color}">
+        </span>
+        ${data.title}
+      </h2>
+
+      <div class="modal-body">
+        <p>${data.description}</p>
+
+        <h3>Did You Know?</h3>
+
+        <ul>
+          ${data.facts.map(f => `<li>${f}</li>`).join("")}
+        </ul>
+
+        ${
+          data.video
+            ? `
+              <p>
+                <a
+                  href="${data.video}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style/p>
+            `
+            : ""
+        }
+      </div>
+    `;
+
+  } catch (error) {
+
+    modalBody.innerHTML = `
+      <div class="modal-error">
+        Unable to load station information.
+      </div>
+    `;
+
+    console.error(error);
+  }
+}
+``
   :root{
     --night:#101a4d; --night-deep:#0a1136;
     --lime:#c8f531; --siren:#ff3b4e; --beacon:#2bb3ff;
