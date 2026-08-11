@@ -45,16 +45,6 @@
 {
   "id": "community-paramedic",
   "title": "Community Paramedics",
-  "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
-  "facts": [
-    "Community Paramedics help reduce unnecessary emergency department visits.",
-    "They provide wellness checks and chronic disease monitoring.",
-    "They work closely with family doctors, nurses, and community partners."
-  ],
-
-}{
-  "id": "community-paramedic",
-  "title": "Community Paramedics",
   "image": "images/Community_Paramedic.jpg"
   "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
   "facts": [
