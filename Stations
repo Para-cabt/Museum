@@ -1,1 +1,68 @@
-
+[
+  {
+    "id": "stop-the-bleed",
+    "title": "Stop The Bleed",
+    "image": "images/stop-the-bleed.jpg",
+    "description": "Severe bleeding can become life-threatening within minutes. Knowing how to apply pressure and use a tourniquet can help save a life.",
+    "facts": [
+      "A person can lose a dangerous amount of blood in just a few minutes.",
+      "Direct pressure is often the first step in controlling bleeding.",
+      "Tourniquets save lives when used correctly."
+    ],
+    "video": "https://www.stopthebleed.ca"
+  },
+  {
+    "id": "aed",
+    "title": "Public Access Defibrillator (AED)",
+    "image": "images/aed.jpg",
+    "description": "An AED analyzes the heart rhythm and can deliver a shock when needed.",
+    "facts": [
+      "AEDs provide step-by-step voice instructions.",
+      "AEDs are safe to use, even for first-time users.",
+      "Early defibrillation greatly improves survival."
+    ],
+    "video": "https://www.heartandstroke.ca"
+  },
+  {
+    "id": "search-and-rescue",
+    "title": "Search and Rescue",
+    "image": "images/search-and-rescue.jpg",
+    "description": "Search and Rescue is often a team effort. Our Paramedic Support Unit deploys alongside allied agencies to find those in need.",
+    "facts": [
+      "Talk with Ben to learn more about Search and Rescue operations."
+    ],
+    "video": ""
+  },
+  {
+    "id": "cpr",
+    "title": "CPR",
+    "image": "images/cpr.jpg",
+    "description": "Quickly performing CPR helps save lives.",
+    "facts": [
+      "An easy way to remember the correct CPR pace is by singing Staying Alive or Pink Pony Club in your head.",
+      "Bystander CPR combined with early AED use within three minutes can increase survival rates significantly."
+    ],
+    "video": "https://www.heartandstroke.ca"
+  },
+{
+  "id": "community-paramedic",
+  "title": "Community Paramedics",
+  "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
+  "facts": [
+    "Community Paramedics help reduce unnecessary emergency department visits.",
+    "They provide wellness checks and chronic disease monitoring.",
+    "They work closely with family doctors, nurses, and community partners."
+  ],
+  "video": "https://ottawa.ca/en/health-and-public-safety/ottawa-paramedic-service"
+}{
+  "id": "community-paramedic",
+  "title": "Community Paramedics",
+  "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
+  "facts": [
+    "Community Paramedics help reduce unnecessary emergency department visits.",
+    "They provide wellness checks and chronic disease monitoring.",
+    "They work closely with family doctors, nurses, and community partners."
+  ],
+  "video": "https://ottawa.ca/en/health-and-public-safety/ottawa-paramedic-service"
+}
+]
