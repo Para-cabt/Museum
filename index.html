@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Badge Board — Canada Science and Technology Museum</title>
+<title>Badge Board — Ingenium Canada Science and Technology Museum</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
@@ -185,26 +185,27 @@
       <path class="ecg-line" id="ecg" d="M 0 60 L 1200 60"></path>
       <circle id="scanner" cx="0" cy="60" r="7"></circle>
     </svg>
-    <div class="ecg-readout"><span>Badge monitor</span><span id="readout">0 beats</span></div>
+    <div class="ecg-readout"><span id="monitorLabel">Badge monitor</span><span id="readout">0 beats</span></div>
   </div>
 </div>
 
 <div class="wrap">
   <header class="hero">
-    <p class="eyebrow">Community Safety Day</p>
-    <h1>Badge<br>Board</h1>
-    <p class="lede">Finish a station, then tap its badge to collect it.</p>
-    <div class="tally"><b id="count">0</b> of 6 collected</div>
+    <p class="eyebrow" id="eyebrow">Community Safety Day</p>
+    <h1><span id="title1">Badge</span><br><span id="title2">Board</span></h1>
+    <p class="lede" id="lede">Finish a station, then tap its badge to collect it.</p>
+    <div class="tally"><b id="count">0</b> <span id="tallyOf">of 13 collected</span></div>
   </header>
 
   <main class="board" id="board"></main>
 
   <section class="finish" id="finish" aria-live="polite">
-    <h3>Congratulations! 🎉</h3>
-    <p>You've completed all six stations and earned all your badges. Fantastic work!</p>
+    <h3 id="finishTitle">Congratulations! 🎉</h3>
+    <p id="finishBody">You've completed all thirteen stations and earned all your badges. Fantastic work!</p>
   </section>
 
   <footer>
+    <button class="btn" id="lang">Français</button>
     <button class="btn" id="sound">Sound: on</button>
     <button class="btn" id="reset">Start over</button>
   </footer>
@@ -222,28 +223,104 @@
 
 <script>
 const STATIONS = [
-  { id:"bleed", name:"Stop the Bleed", blurb:"Pack it, press it, wrap it.", color:"#ff3b4e",
+  { id:"bleed", name:"Stop the Bleed", name_fr:"Arrêter l'hémorragie", blurb:"Pack it, press it, wrap it.", blurb_fr:"Tamponnez, comprimez, bandez.", color:"#ff3b4e",
     icon:`<path d="M50 12 C50 12 24 42 24 60 a26 26 0 0 0 52 0 C76 42 50 12 50 12 Z"/><path d="M36 60 h28"/><path d="M50 46 v28"/>`,
-    hasLearnMore:true, githubTopic:"tourniquet-application" },
-  { id:"cpr", name:"CPR", blurb:"Push hard, push fast, don't stop.", color:"#ff8a3d",
+    hasLearnMore:true },
+  { id:"cpr", name:"CPR", name_fr:"RCR", blurb:"Push hard, push fast, don't stop.", blurb_fr:"Poussez fort, poussez vite, ne vous arrêtez pas.", color:"#ff8a3d",
     icon:`<path d="M50 82 C50 82 16 60 16 38 A18 18 0 0 1 50 30 A18 18 0 0 1 84 38 C84 60 50 82 50 82 Z"/><path d="M22 48 h14 l7 -14 l9 26 l7 -12 h19"/>`,
-    hasLearnMore:true, githubTopic:"cpr-training" },
-  { id:"aed", name:"Public Access Defibs", blurb:"Find it, open it, follow the voice.", color:"#2bb3ff",
+    hasLearnMore:true },
+  { id:"aed", name:"Public Access Defibs", name_fr:"Défibrillateurs à accès public", blurb:"Find it, open it, follow the voice.", blurb_fr:"Trouvez-le, ouvrez-le, suivez la voix.", color:"#2bb3ff",
     icon:`<rect x="18" y="20" width="64" height="60" rx="10"/><path d="M56 32 L38 56 h13 l-7 18 l19 -26 H50 Z"/>`,
-    hasLearnMore:true, githubTopic:"aed-use" },
-  { id:"sar", name:"Search and Rescue", blurb:"Look, listen, and find.", color:"#c8f531",
-    icon:`<path d="M40 50 a10 10 0 1 0 20 0 a10 10 0 1 0 -20 0 M50 40 v20 M40 50 h20"/><path d="M25 50 a25 25 0 1 0 50 0 a25 25 0 1 0 -50 0"/>` },
-  { id:"truck", name:"Touch a Truck", blurb:"Climb in. Try the lights.", color:"#ffc53d",
-    icon:`<path d="M10 66 V38 h44 v28"/><path d="M54 46 h18 l14 14 v6 H54"/><circle cx="30" cy="72" r="8"/><circle cx="70" cy="72" r="8"/><path d="M26 24 h22"/><path d="M37 18 v6"/>` },
-  { id:"community-paramedic", name:"Community Paramedics", blurb:"Keeping people healthy at home and in the community.", color:"#7f5af0",
-    icon:`<rect x="28" y="20" width="44" height="60" rx="6"/><path d="M50 32 v24"/><path d="M38 44 h24"/><path d="M36 80 h28"/>`,
-    hasLearnMore:true, githubTopic:"community-paramedicine" }
+    hasLearnMore:true },
+  { id:"sar", name:"Search and Rescue", name_fr:"Recherche et sauvetage", blurb:"Look, listen, and find.", blurb_fr:"Regardez, écoutez, trouvez.", color:"#c8f531",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"truck", name:"Touch a Truck", name_fr:"Touchez un camion", blurb:"Climb in. Try the lights.", blurb_fr:"Montez à bord. Essayez les gyrophares.", color:"#ffc53d",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"community-paramedic", name:"Community Paramedics", name_fr:"Paramédics communautaires", blurb:"Keeping people healthy at home and in the community.", blurb_fr:"Garder les gens en santé à la maison et dans la communauté.", color:"#7f5af0",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"support", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"regular-ops", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"response-unit", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"logistic", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"comm-officer", name:"Communication Officer", name_fr:"Agent des communications", blurb:"Connecting people, saving lives.", blurb_fr:"Relier les gens, sauver des vies.", color:"#f39c12",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"tactical", name:"Paramedic Tactical Unit", name_fr:"Unité tactique paramédicale", blurb:"High-risk, high-skill response.", blurb_fr:"Intervention à haut risque et haute compétence.", color:"#c0392b",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true },
+  { id:"marine", name:"Paramedic Marine Unit", name_fr:"Unité maritime paramédicale", blurb:"Water rescue and marine response.", blurb_fr:"Sauvetage aquatique et intervention maritime.", color:"#3498db",
+    icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
+    hasLearnMore:true }
 ];
+
+/* ---------- language / i18n ---------- */
+let lang = "en";
+const I18N = {
+  en: {
+    eyebrow: "Community Safety Day",
+    title1: "Badge", title2: "Board",
+    lede: "Finish a station, then tap its badge to collect it.",
+    tallyOf: "of 13 collected",
+    tapToCollect: "Tap to collect",
+    collected: "Collected",
+    learnMore: "Learn More",
+    soundOn: "Sound: on", soundOff: "Sound: off",
+    startOver: "Start over", tapAgain: "Tap again to clear",
+    finishTitle: "Congratulations! 🎉",
+    finishBody: "You've completed all thirteen stations and earned your Community Safety Day badge. Fantastic work!",
+    badgeMonitor: "Badge monitor",
+    beat: "beat", beats: "beats",
+    langLabel: "Français",
+    alreadyCollected: n => `${n} is already collected.`,
+    collectedMsg: (n,c) => `${n} collected. ${c} of 13.`,
+    boardCleared: "Board cleared. No badges collected.",
+    loading: "Loading...",
+    didYouKnow: "Did You Know?",
+    unableToLoad: "Unable to load station information."
+  },
+  fr: {
+    eyebrow: "Journée de la sécurité communautaire",
+    title1: "Tableau", title2: "d'insignes",
+    lede: "Terminez une station, puis touchez son insigne pour le collecter.",
+    tallyOf: "de 13 collectés",
+    tapToCollect: "Touchez pour collecter",
+    collected: "Collecté",
+    learnMore: "En savoir plus",
+    soundOn: "Son : activé", soundOff: "Son : désactivé",
+    startOver: "Recommencer", tapAgain: "Touchez encore pour effacer",
+    finishTitle: "Félicitations! 🎉",
+    finishBody: "Vous avez terminé les treize stations et gagné votre insigne de la Journée de la sécurité communautaire. Excellent travail!",
+    badgeMonitor: "Moniteur d'insignes",
+    beat: "battement", beats: "battements",
+    langLabel: "English",
+    alreadyCollected: n => `${n} est déjà collecté.`,
+    collectedMsg: (n,c) => `${n} collecté. ${c} sur 13.`,
+    boardCleared: "Tableau effacé. Aucun insigne collecté.",
+    loading: "Chargement...",
+    didYouKnow: "Le saviez-vous?",
+    unableToLoad: "Impossible de charger les informations de la station."
+  }
+};
+function t(key){ return I18N[lang][key]; }
+function stationName(s){ return lang === "fr" && s.name_fr ? s.name_fr : s.name; }
+function stationBlurb(s){ return lang === "fr" && s.blurb_fr ? s.blurb_fr : s.blurb; }
 
 /* Audio context setup */
 let soundOn = true, ac, memoryOnly;
 const KEY = "badges:csd2024";
 const soundBtn = document.getElementById("sound");
+const langBtn = document.getElementById("lang");
 const countEl = document.getElementById("count");
 const resetBtn = document.getElementById("reset");
 const readout = document.getElementById("readout");
@@ -260,6 +337,7 @@ function audio(){ return ac || (ac = new (window.AudioContext||window.webkitAudi
 /* struck-bell voice: fundamental plus inharmonic partials, fast attack, long tail */
 function bell(freq, when = 0, dur = 1.3, vol = .3){
   if(!soundOn || !audio()) return;
+  initAudio();
   const t = ac.currentTime + when;
   [[1,1,1],[2.01,.42,.62],[3.02,.2,.42],[4.24,.1,.3],[5.43,.05,.22]].forEach(([m,a,d]) => {
     const o = ac.createOscillator(), g = ac.createGain();
@@ -276,6 +354,7 @@ function bell(freq, when = 0, dur = 1.3, vol = .3){
 /* dry mechanical click — filtered noise transient, ~12 ms */
 function click(vol = .3){
   if(!soundOn || !audio()) return;
+  initAudio();
   const t = ac.currentTime, n = Math.floor(ac.sampleRate * .012);
   const buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
   for(let i=0;i<n;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/n, 7);
@@ -288,7 +367,7 @@ function click(vol = .3){
 }
 
 /* pentatonic run — the nth badge collected is the nth note, so any order sounds right */
-const RUN = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+const RUN = [261.63, 329.63, 392.00, 493.88, 523.25, 587.33, 659.25, 783.99, 880.00, 987.77, 1046.50, 1174.66, 1318.51];
 function collectTone(n){
   const f = RUN[Math.min(n, RUN.length) - 1];
   bell(f, 0, 1.5, .3);
@@ -304,7 +383,7 @@ function downRun(){ [659.25,523.25,392].forEach((f,i)=>bell(f, i*.1, .8, .18)); 
 
 soundBtn.addEventListener("click", () => {
   soundOn = !soundOn;
-  soundBtn.textContent = soundOn ? "Sound: on" : "Sound: off";
+  soundBtn.textContent = soundOn ? t("soundOn") : t("soundOff");
   if(soundOn){ click(.25); bell(783.99, .04, 1, .26); }
 });
 
@@ -320,10 +399,10 @@ async function save(){
 
 /* ---------- modal management ---------- */
 function openLearnModal(station) {
-  modalBody.innerHTML = '<div class="modal-loading">Loading...</div>';
+  modalBody.innerHTML = `<div class="modal-loading">${t("loading")}</div>`;
   learnModal.classList.add("show");
   learnModal.setAttribute("aria-hidden", "false");
-  fetchGitHubData(station);
+  fetchStationData(station);
 }
 
 function closeLearnModal() {
@@ -331,47 +410,51 @@ function closeLearnModal() {
   learnModal.setAttribute("aria-hidden", "true");
 }
 
-async function fetchGitHubData(station) {
+/* Cache the stations.json so we only fetch it once */
+let stationDataCache = null;
+async function loadStationData(){
+  if(stationDataCache) return stationDataCache;
+  const response = await fetch("stations.json");
+  if(!response.ok) throw new Error("Unable to load station data");
+  stationDataCache = await response.json();
+  return stationDataCache;
+}
+
+/* Pick a field in the current language, falling back to English */
+function pick(data, field){
+  if(lang === "fr" && data[field + "_fr"] != null) return data[field + "_fr"];
+  return data[field];
+}
+
+async function fetchStationData(station){
   try {
-    // Try to fetch repositories related to the topic
-    const response = await fetch(`https://api.github.com/search/repositories?q=${station.githubTopic}+topic:education&sort=stars&order=desc&per_page=3`);
-    const data = await response.json();
-    
+    const stations = await loadStationData();
+    const data = stations.find(s => s.id === station.id);
+    if(!data) throw new Error("Station not found");
+
+    const title = pick(data, "title") || stationName(station);
+    const description = pick(data, "description");
+    const facts = pick(data, "facts");
+
     let content = `
       <h2>
         <span class="modal-color-accent" style="background-color: ${station.color}"></span>
-        ${station.name}
+        ${title}
       </h2>
-      <div class="modal-body">
-    `;
+      <div class="modal-body">`;
 
-    if (data.items && data.items.length > 0) {
-      content += `<p><strong>Related Educational Resources on GitHub:</strong></p>`;
-      data.items.forEach(repo => {
-        const description = repo.description || "No description available";
-        content += `
-          <div style="margin-bottom: 20px; padding: 15px; background: rgba(200,245,49,.08); border-radius: 12px; border-left: 3px solid ${station.color}">
-            <p style="margin: 0 0 8px; font-weight: 600; color: var(--paper)">
-              <a href="${repo.html_url}" target="_blank" style="color: var(--beacon); text-decoration: none;">${repo.name}</a>
-            </p>
-            <p style="margin: 0 0 8px; font-size: .9rem">${description}</p>
-            <p style="margin: 0; font-size: .85rem; color: rgba(200,245,49,.75)">⭐ ${repo.stargazers_count} stars • ${repo.language || 'Various'}</p>
-          </div>
-        `;
-      });
-    } else {
-      content += `<p>Learn more about <strong>${station.name}</strong> by exploring community resources and training materials.</p>`;
+    if(data.image){
+      content += `<img src="${data.image}" alt="${title}" style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;margin-bottom:18px" onerror="this.style.display='none'">`;
     }
 
-    // Add general safety information
-    const safetyInfo = {
-      "bleed": "Stop the Bleed training teaches life-saving techniques for severe bleeding control. The key steps are: <strong>Recognize</strong> severe bleeding, <strong>Act</strong> by applying direct pressure, and <strong>Pack</strong> the wound with gauze if needed.",
-      "cpr": "Cardiopulmonary Resuscitation (CPR) is an emergency procedure. Remember: <strong>C</strong>irculation (chest compressions), <strong>A</strong>irway (keep open), <strong>B</strong>reathing (rescue breaths). Push hard and fast at 100-120 compressions per minute.",
-      "aed": "Automated External Defibrillators (AEDs) are designed to be used by anyone. The steps are: <strong>Call 911</strong>, <strong>Get the AED</strong>, <strong>Place pads</strong> on the chest, and <strong>Follow voice instructions</strong>."
-    };
+    if(description){
+      content += `<p>${description}</p>`;
+    }
 
-    if (safetyInfo[station.id]) {
-      content += `<div style="margin-top: 20px; padding: 15px; background: rgba(43,179,255,.1); border-radius: 12px; border-left: 3px solid var(--beacon)"><strong>Quick Reference:</strong> ${safetyInfo[station.id]}</div>`;
+    if(Array.isArray(facts) && facts.length){
+      content += `<h3 style="font-family:var(--display);font-size:1.1rem;color:var(--lime);margin:22px 0 12px">${t("didYouKnow")}</h3><ul style="margin:0;padding-left:20px">`;
+      facts.forEach(f => { content += `<li style="margin-bottom:8px">${f}</li>`; });
+      content += `</ul>`;
     }
 
     content += `</div>`;
@@ -380,10 +463,11 @@ async function fetchGitHubData(station) {
     modalBody.innerHTML = `
       <h2>
         <span class="modal-color-accent" style="background-color: ${station.color}"></span>
-        ${station.name}
+        ${stationName(station)}
       </h2>
-      <div class="modal-error">Unable to fetch GitHub data. <strong>Quick Fact:</strong> ${station.name} - ${station.blurb}</div>
+      <div class="modal-error">${t("unableToLoad")} <strong>${stationBlurb(station)}</strong></div>
     `;
+    console.error(error);
   }
 }
 
@@ -393,46 +477,74 @@ learnModal.addEventListener("click", (e) => {
 });
 
 /* ---------- build ---------- */
-STATIONS.forEach(s => {
-  const btn = document.createElement("button");
-  btn.className = "badge";
-  btn.type = "button";
-  btn.style.setProperty("--c", s.color);
-  btn.dataset.id = s.id;
-  btn.setAttribute("aria-pressed", "false");
-  
-  // Prefer an image if provided, otherwise fallback to the SVG icon
-  let patchHtml;
-  if (s.image) {
-    patchHtml = `<div class="patch"><img src="${s.image}" alt="${s.name} photo" loading="lazy" onerror="this.style.display='none'"></div>`;
-  } else {
-    patchHtml = `<div class="patch"><svg viewBox="0 0 100 100" aria-hidden="true">${s.icon || ""}</svg></div>`;
-  }
-  
-  let html = `
-    ${patchHtml}
-    <h2>${s.name}</h2><p>${s.blurb}</p>
-    <span class="status">Tap to collect</span>`;
-  
-  if (s.hasLearnMore) {
-    html += `<div class="badge-controls"><button class="learn-btn" data-station="${s.id}">Learn More</button></div>`;
-  }
-  
-  btn.innerHTML = html;
-  btn.addEventListener("click", () => collect(s, btn));
-  
-  // Learn More button handler (stop propagation so main click doesn't fire)
-  if (s.hasLearnMore) {
-    const learnBtn = btn.querySelector(".learn-btn");
-    if (learnBtn) {
-      learnBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openLearnModal(s);
-      });
+function renderBadges(){
+  board.innerHTML = "";
+  STATIONS.forEach(s => {
+    const btn = document.createElement("button");
+    btn.className = "badge";
+    btn.type = "button";
+    btn.style.setProperty("--c", s.color);
+    btn.dataset.id = s.id;
+    btn.setAttribute("aria-pressed", "false");
+
+    // Prefer an image if provided, otherwise fallback to the SVG icon
+    let patchHtml;
+    if (s.image) {
+      patchHtml = `<div class="patch"><img src="${s.image}" alt="${stationName(s)}" loading="lazy" onerror="this.style.display='none'"></div>`;
+    } else {
+      patchHtml = `<div class="patch"><svg viewBox="0 0 100 100" aria-hidden="true">${s.icon || ""}</svg></div>`;
     }
-  }
-  
-  board.appendChild(btn);
+
+    let html = `
+      ${patchHtml}
+      <h2>${stationName(s)}</h2><p>${stationBlurb(s)}</p>
+      <span class="status">${t("tapToCollect")}</span>`;
+
+    if (s.hasLearnMore) {
+      html += `<div class="badge-controls"><button class="learn-btn" data-station="${s.id}">${t("learnMore")}</button></div>`;
+    }
+
+    btn.innerHTML = html;
+    btn.addEventListener("click", () => collect(s, btn));
+
+    // Learn More button handler (stop propagation so main click doesn't fire)
+    if (s.hasLearnMore) {
+      const learnBtn = btn.querySelector(".learn-btn");
+      if (learnBtn) {
+        learnBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openLearnModal(s);
+        });
+      }
+    }
+
+    board.appendChild(btn);
+  });
+  // Re-apply earned visual state after (re)building
+  document.querySelectorAll(".badge").forEach(b => { if(earned.has(b.dataset.id)) paint(b, true); });
+}
+
+/* ---------- language toggle ---------- */
+function applyLanguage(){
+  document.documentElement.lang = lang;
+  document.getElementById("eyebrow").textContent = t("eyebrow");
+  document.getElementById("title1").textContent = t("title1");
+  document.getElementById("title2").textContent = t("title2");
+  document.getElementById("lede").textContent = t("lede");
+  document.getElementById("tallyOf").textContent = t("tallyOf");
+  document.getElementById("finishTitle").textContent = t("finishTitle");
+  document.getElementById("finishBody").textContent = t("finishBody");
+  document.getElementById("monitorLabel").textContent = t("badgeMonitor");
+  langBtn.textContent = t("langLabel");
+  soundBtn.textContent = soundOn ? t("soundOn") : t("soundOff");
+  resetBtn.textContent = armed ? t("tapAgain") : t("startOver");
+  renderBadges();
+  refresh();
+}
+langBtn.addEventListener("click", () => {
+  click();
+  lang = (lang === "en") ? "fr" : "en";
+  applyLanguage();
 });
 
 function collect(s, btn){
@@ -440,7 +552,7 @@ function collect(s, btn){
   if(earned.has(s.id)){
     if(!calm){ btn.classList.remove("wiggle"); void btn.offsetWidth; btn.classList.add("wiggle"); }
     thud();
-    announce.textContent = `${s.name} is already collected.`;
+    announce.textContent = t("alreadyCollected")(stationName(s));
     return;
   }
   earned.add(s.id);
@@ -451,7 +563,7 @@ function collect(s, btn){
     patch.classList.remove("pop"); void patch.offsetWidth; patch.classList.add("pop");
     sparks(btn, s.color);
   }
-  announce.textContent = `${s.name} collected. ${earned.size} of 6.`;
+  announce.textContent = t("collectedMsg")(stationName(s), earned.size);
   const done = earned.size === STATIONS.length;
   refresh(); save();
   if(done) setTimeout(fanfare, 380);
@@ -460,7 +572,7 @@ function collect(s, btn){
 function paint(btn,on){
   btn.classList.toggle("earned",on);
   btn.setAttribute("aria-pressed",String(on));
-  btn.querySelector(".status").textContent = on ? "Collected" : "Tap to collect";
+  btn.querySelector(".status").textContent = on ? t("collected") : t("tapToCollect");
 }
 
 function sparks(btn,color){
@@ -504,18 +616,26 @@ function drawTrace(){
 }
 function runScanner(){
   if(calm){ scanner.style.display="none"; return; }
-  const period=4200;
+  // Speed ramps up as more badges are earned: full 13 badges = ~3x faster
+  const basePeriod = 5200;   // slowest (0 badges)
+  const minPeriod = 1600;    // fastest (all 13 badges)
+  let phase = 0, last = null;
   (function step(now){
-    const len=ecg.getTotalLength();
-    const p=ecg.getPointAtLength(((now%period)/period)*len);
-    scanner.setAttribute("cx",p.x); scanner.setAttribute("cy",p.y);
+    if(last === null) last = now;
+    const dt = now - last; last = now;
+    const frac = earned.size / STATIONS.length;      // 0 → 1
+    const period = basePeriod - (basePeriod - minPeriod) * frac;
+    phase = (phase + dt / period) % 1;               // accumulate, smooth on speed change
+    const len = ecg.getTotalLength();
+    const p = ecg.getPointAtLength(phase * len);
+    scanner.setAttribute("cx", p.x); scanner.setAttribute("cy", p.y);
     requestAnimationFrame(step);
   })(0);
 }
 
 function refresh(){
   countEl.textContent = earned.size;
-  readout.textContent = earned.size===1 ? "1 beat" : `${earned.size} beats`;
+  readout.textContent = earned.size===1 ? `1 ${t("beat")}` : `${earned.size} ${t("beats")}`;
   finish.classList.toggle("show", earned.size===STATIONS.length);
   drawTrace();
 }
@@ -526,27 +646,33 @@ resetBtn.addEventListener("click", () => {
   click();
   if(!armed){
     armed=true; resetBtn.classList.add("armed");
-    resetBtn.textContent="Tap again to clear";
+    resetBtn.textContent=t("tapAgain");
     armTimer=setTimeout(disarm,3500); return;
   }
   clearTimeout(armTimer); disarm();
   earned.clear();
   document.querySelectorAll(".badge").forEach(b=>paint(b,false));
-  announce.textContent="Board cleared. No badges collected.";
+  announce.textContent=t("boardCleared");
   downRun(); refresh(); save();
 });
-function disarm(){ armed=false; resetBtn.classList.remove("armed"); resetBtn.textContent="Start over"; }
+function disarm(){ armed=false; resetBtn.classList.remove("armed"); resetBtn.textContent=t("startOver"); }
 
 /* ---------- boot ---------- */
 const calm = location.search.includes("calm");
 const ecg = document.getElementById("ecg");
 const scanner = document.getElementById("scanner");
-const dry = ac && ac.createGain(), wet = ac && ac.createGain();
+let dry, wet;
+
+function initAudio(){
+  if(!ac) return;
+  if(!dry) dry = ac.createGain();
+  if(!wet) wet = ac.createGain();
+}
 
 (async () => {
   earned = new Set(await load());
-  document.querySelectorAll(".badge").forEach(b=>{ if(earned.has(b.dataset.id)) paint(b,true); });
-  refresh(); runScanner();
+  applyLanguage();   // builds badges (renderBadges) + sets all static text, then re-paints earned
+  runScanner();
 })();
 </script>
 </body>
