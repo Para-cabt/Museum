@@ -6,8 +6,14 @@
     "title_fr": "Arrêter l'hémorragie",
     "description": "Severe bleeding can become life-threatening within minutes. Knowing how to apply pressure and use a tourniquet can help save a life.",
     "description_fr": "Une hémorragie grave peut mettre la vie en danger en quelques minutes. Savoir comment appliquer une pression et utiliser un garrot peut aider à sauver une vie.",
-    "facts": [],
-    "facts_fr": []
+    "facts":[
+"Severe bleeding is the leading cause of preventable death after traumatic injury.",
+"A person with a severe uncontrolled bleed can die within minutes.",
+"Remember: apply direct pressure to the wound. If the bleeding continues, pack the wound or apply a tourniquet."
+ ],
+    "facts_fr": ["Les saignements graves sont la principale cause de décès évitables à la suite d’un traumatisme.",
+"Une personne présentant une hémorragie grave non contrôlée peut mourir en quelques minutes.",
+"Rappelez-vous : appliquez une pression directe sur la plaie. Si le saignement continue, faites un méchage de la plaie ou appliquez un garrot."]
   },
   {
     "id": "cpr",
@@ -16,8 +22,14 @@
     "title_fr": "RCR",
     "description": "Quickly performing CPR helps save lives.",
     "description_fr": "Effectuer rapidement la RCR aide à sauver des vies.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["You are not required to do mouth-to-mouth", "Immediate CPR can double or triple a person's chance of survival after cardiac arrest.",
+"High-quality chest compressions are the most important part of CPR.",
+"Push hard and fast in the center of the chest, allowing complete chest recoil between compressions.",
+"For adults, chest compressions should be performed at a rate of 100 to 120 compressions per minute. Think of the song Staying Alive or Pink Pony Club to keep the rythm"],
+    "facts_fr": ["Vous n’êtes pas obligé d’effectuer le bouche-à-bouche pour pratiquer la RCR.", "La RCR pratiquée immédiatement peut doubler ou même tripler les chances de survie d’une personne en arrêt cardiaque.",
+"Des compressions thoraciques de haute qualité constituent l’élément le plus important de la RCR.",
+"Effectuez des compressions fortes et rapides au centre de la poitrine, en permettant un retour complet de la poitrine entre chaque compression.",
+"Chez l’adulte, les compressions thoraciques doivent être effectuées à un rythme de 100 à 120 compressions par minute. Pensez à la chanson Stayin’ Alive ou Pink Pony Club pour maintenir le bon rythme."]
   },
   {
     "id": "aed",
@@ -26,8 +38,24 @@
     "title_fr": "Défibrillateur à accès public (DEA)",
     "description": "An AED analyzes the heart rhythm and can deliver a shock when needed.",
     "description_fr": "Un DEA analyse le rythme cardiaque et peut administrer un choc au besoin.",
-    "facts": [],
-    "facts_fr": []
+    "facts": [
+"An AED (Automated External Defibrillator) can automatically analyze a person's heart rhythm and determine whether a shock is needed.",
+"You cannot accidentally deliver a shock with an AED; the device will only deliver a shock if it determines one is necessary.",
+"Every minute without CPR and defibrillation decreases the chance of survival by approximately 7 to 10 percent.",
+"AEDs are designed to be used by anyone, even without medical training.",
+"The AED provides step-by-step voice instructions to guide you through the rescue.",
+"Early use of an AED, combined with CPR, can significantly increase the chances of survival after cardiac arrest.",
+"AEDs are commonly found in schools, airports, shopping malls, arenas, and other public places.",
+"It is safe to use an AED in light rain or on a wet surface, provided the victim's chest is quickly dried first."
+],
+    "facts_fr": ["Un DEA (défibrillateur externe automatisé) peut analyser automatiquement le rythme cardiaque et indiquer s’il est nécessaire d’administrer un choc.",
+"Vous ne pouvez pas provoquer un choc accidentel avec un DEA; l’appareil ne délivrera un choc que si cela est nécessaire.",
+"Chaque minute sans RCR ni défibrillation réduit les chances de survie d’environ 7 à 10 %.",
+"Les DEA sont conçus pour être utilisés par tout le monde, même sans formation médicale.",
+"Les instructions vocales du DEA vous guident étape par étape tout au long de l’intervention.",
+"L’utilisation rapide d’un DEA, combinée à la RCR, peut considérablement augmenter les chances de survie après un arrêt cardiaque.",
+"Les DEA se trouvent souvent dans les écoles, les aéroports, les centres commerciaux, les arénas et d’autres lieux publics.",
+"Il est sécuritaire d’utiliser un DEA sous la pluie légère ou sur une surface humide, à condition d’assécher rapidement la poitrine de la victime.]
   },
   {
     "id": "sar",
@@ -36,8 +64,17 @@
     "title_fr": "Recherche et sauvetage",
     "description": "Search and Rescue is often a team effort. Our Paramedic Support Unit deploys alongside allied agencies to find those in need.",
     "description_fr": "La recherche et le sauvetage sont souvent un travail d'équipe. Notre Unité de soutien paramédical se déploie aux côtés d'organismes partenaires pour retrouver les personnes en détresse.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["Most missing people are found within a relatively short distance from where they were last seen.",
+"Weather, terrain, and daylight can significantly affect the speed and success of a search operation.",
+"Carrying a whistle can help rescuers locate you more easily if you become lost outdoors.",
+"The best way to assist Search and Rescue is to stay where you are, remain visible, and conserve your energy if you become lost."
+    ],
+    "facts_fr": [
+"La plupart des personnes disparues sont retrouvées à une distance relativement courte de l’endroit où elles ont été vues pour la dernière fois.",
+"Les conditions météorologiques, le terrain et la luminosité peuvent grandement influencer la rapidité et le succès d’une opération de recherche.",
+"Transporter un sifflet peut aider les sauveteurs à vous localiser plus facilement si vous vous perdez en plein air.",
+"La meilleure façon d’aider les équipes de recherche et sauvetage si vous êtes perdu est de rester sur place, de demeurer visible et de conserver votre énergie."
+]
   },
   {
     "id": "truck",
@@ -46,8 +83,8 @@
     "title_fr": "Touchez un camion",
     "description": "Climb aboard and explore the vehicles that help paramedics respond to emergencies.",
     "description_fr": "Montez à bord et explorez les véhicules qui aident les paramédics à intervenir en cas d'urgence.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["The Service uses more than just ambulances. The fleet includes response SUVs, bicycles and other specialized rescue vehicles."],
+    "facts_fr": ["Le Service utilise bien plus que des ambulances. Sa flotte comprend des VUS d’intervention, des bicyclettes et d’autres véhicules de sauvetage spécialisés."]
   },
   {
     "id": "community-paramedic",
@@ -56,16 +93,22 @@
     "title_fr": "Paramédics communautaires",
     "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
     "description_fr": "Les paramédics communautaires travaillent avec les patients à domicile et dans la communauté pour améliorer la santé, prévenir les urgences et mettre les gens en contact avec les ressources locales.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["Community Paramedics can monitor chronic conditions such as diabetes, heart failure, and COPD.", 
+    "By helping patients manage their health at home, Community Paramedics can reduce unnecessary emergency department visits.",
+    "The goal of Community Paramedicine is to keep people healthier, safer, and at home whenever possible."
+    ],
+    "facts_fr": ["Les paramédics communautaires peuvent assurer le suivi de maladies chroniques telles que le diabète, l’insuffisance cardiaque et la MPOC (maladie pulmonaire obstructive chronique).",
+"En aidant les patients à gérer leur santé à domicile, les paramédics communautaires peuvent réduire les visites inutiles à l’urgence.",
+"L’objectif de la paramédecine communautaire est d’aider les gens à demeurer en meilleure santé, en sécurité et à la maison aussi longtemps que possible."]
   },
   {
     "id": "support",
     "image": "images/support.jpg",
     "title": "Paramedic Support Unit",
     "title_fr": "Unité de soutien paramédical",
-    "description": "The Paramedic Support Unit provides equipment, supplies, and logistical support to crews in the field.",
-    "description_fr": "L'Unité de soutien paramédical fournit l'équipement, les fournitures et le soutien logistique aux équipes sur le terrain.",
+    "description": "The Paramedic Support Unit is deployed along side allied agencies for public order events, CBRNE, Search and Rescue events and more.",
+    "description_fr": "L’Unité de soutien paramédic est déployée aux côtés des agences partenaires lors d’événements de maintien de l’ordre public, d’incidents CBRNE, d’opérations de recherche et sauvetage, et bien plus encore."
+,
     "facts": [],
     "facts_fr": []
   },
@@ -86,8 +129,8 @@
     "title_fr": "Unité d'intervention paramédicale",
     "description": "The Paramedic Response Unit is built for rapid deployment and rapid response to urgent calls.",
     "description_fr": "L'Unité d'intervention paramédicale est conçue pour un déploiement rapide et une intervention rapide lors d'appels urgents.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["Constantly looking for more ways to assist the community, they deploy in both urbain in rural settings"],
+    "facts_fr": ["Toujours à la recherche de nouvelles façons d’aider la communauté, cette unité est déployée dans des environnements urbains comme ruraux."]
   },
   {
     "id": "logistic",
@@ -106,8 +149,8 @@
     "title_fr": "Agent des communications",
     "description": "Communication Officers connect people and coordinate the flow of information that helps save lives.",
     "description_fr": "Les agents des communications relient les gens et coordonnent la circulation de l'information qui aide à sauver des vies.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["Our Communication Officers receive and dispatch between 750 to 1 000 calls a day"],
+    "facts_fr": ["Nos agents des communications reçoivent et répartissent entre 750 et 1 000 appels par jour."]
   },
   {
     "id": "tactical",
@@ -116,8 +159,8 @@
     "title_fr": "Unité tactique paramédicale",
     "description": "The Paramedic Tactical Unit responds to high-risk situations that demand specialized skills and training.",
     "description_fr": "L'Unité tactique paramédicale intervient dans des situations à haut risque qui exigent des compétences et une formation spécialisées.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["Our Tactical Paramedics are trained in things like High Risk rescue operations, CBRNE hot zone responses, rope access operations and mass casualty events" ],
+    "facts_fr": ["Nos paramédics tactiques sont formés pour intervenir lors d’opérations de sauvetage à haut risque, d’incidents CBRNE en zone chaude, d’opérations d’accès sur corde et d’événements impliquant de nombreuses victimes."]
   },
   {
     "id": "marine",
@@ -126,7 +169,7 @@
     "title_fr": "Unité maritime paramédicale",
     "description": "The Paramedic Marine Unit provides water rescue and emergency care on lakes, rivers, and waterways.",
     "description_fr": "L'Unité maritime paramédicale assure le sauvetage aquatique et les soins d'urgence sur les lacs, les rivières et les voies navigables.",
-    "facts": [],
-    "facts_fr": []
+    "facts": ["The Paramedic Marine Unit deploys along side our police and Fire partners to all water related events."],
+    "facts_fr": ["L’Unité marine paramédicale est déployée aux côtés de nos partenaires policiers et pompiers lors de tous les événements liés au milieu aquatique."]
   }
 ]
