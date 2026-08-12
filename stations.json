@@ -1,0 +1,132 @@
+[
+  {
+    "id": "bleed",
+    "image": "images/tourniquet.jpg",
+    "title": "Stop The Bleed",
+    "title_fr": "Arrêter l'hémorragie",
+    "description": "Severe bleeding can become life-threatening within minutes. Knowing how to apply pressure and use a tourniquet can help save a life.",
+    "description_fr": "Une hémorragie grave peut mettre la vie en danger en quelques minutes. Savoir comment appliquer une pression et utiliser un garrot peut aider à sauver une vie.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "cpr",
+    "image": "images/cpr.jfif",
+    "title": "CPR",
+    "title_fr": "RCR",
+    "description": "Quickly performing CPR helps save lives.",
+    "description_fr": "Effectuer rapidement la RCR aide à sauver des vies.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "aed",
+    "image": "images/aed.jfif",
+    "title": "Public Access Defibrillator (AED)",
+    "title_fr": "Défibrillateur à accès public (DEA)",
+    "description": "An AED analyzes the heart rhythm and can deliver a shock when needed.",
+    "description_fr": "Un DEA analyse le rythme cardiaque et peut administrer un choc au besoin.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "sar",
+    "image": "images/search-and-rescue.jpg",
+    "title": "Search and Rescue",
+    "title_fr": "Recherche et sauvetage",
+    "description": "Search and Rescue is often a team effort. Our Paramedic Support Unit deploys alongside allied agencies to find those in need.",
+    "description_fr": "La recherche et le sauvetage sont souvent un travail d'équipe. Notre Unité de soutien paramédical se déploie aux côtés d'organismes partenaires pour retrouver les personnes en détresse.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "truck",
+    "image": "images/truck.png",
+    "title": "Touch a Truck",
+    "title_fr": "Touchez un camion",
+    "description": "Climb aboard and explore the vehicles that help paramedics respond to emergencies.",
+    "description_fr": "Montez à bord et explorez les véhicules qui aident les paramédics à intervenir en cas d'urgence.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "community-paramedic",
+    "image": "images/Community_Paramedic.jpg",
+    "title": "Community Paramedics",
+    "title_fr": "Paramédics communautaires",
+    "description": "Community Paramedics work with patients in their homes and communities to improve health, prevent emergencies, and connect people with local supports.",
+    "description_fr": "Les paramédics communautaires travaillent avec les patients à domicile et dans la communauté pour améliorer la santé, prévenir les urgences et mettre les gens en contact avec les ressources locales.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "support",
+    "image": "images/support.jpg",
+    "title": "Paramedic Support Unit",
+    "title_fr": "Unité de soutien paramédical",
+    "description": "The Paramedic Support Unit provides equipment, supplies, and logistical support to crews in the field.",
+    "description_fr": "L'Unité de soutien paramédical fournit l'équipement, les fournitures et le soutien logistique aux équipes sur le terrain.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "regular-ops",
+    "image": "images/regular-ops.jpg",
+    "title": "Paramedic Regular Operations",
+    "title_fr": "Opérations paramédicales régulières",
+    "description": "Regular Operations paramedics provide everyday emergency response across the community.",
+    "description_fr": "Les paramédics des opérations régulières assurent l'intervention d'urgence au quotidien dans toute la communauté.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "response-unit",
+    "image": "images/response-unit.jpg",
+    "title": "Paramedic Response Unit",
+    "title_fr": "Unité d'intervention paramédicale",
+    "description": "The Paramedic Response Unit is built for rapid deployment and rapid response to urgent calls.",
+    "description_fr": "L'Unité d'intervention paramédicale est conçue pour un déploiement rapide et une intervention rapide lors d'appels urgents.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "logistic",
+    "image": "images/logistic.jpg",
+    "title": "Logistic Unit",
+    "title_fr": "Unité logistique",
+    "description": "The Logistic Unit manages supplies, equipment, and coordination to keep operations running smoothly.",
+    "description_fr": "L'Unité logistique gère les fournitures, l'équipement et la coordination pour assurer le bon déroulement des opérations.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "comm-officer",
+    "image": "images/comm-officer.jpg",
+    "title": "Communication Officer",
+    "title_fr": "Agent des communications",
+    "description": "Communication Officers connect people and coordinate the flow of information that helps save lives.",
+    "description_fr": "Les agents des communications relient les gens et coordonnent la circulation de l'information qui aide à sauver des vies.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "tactical",
+    "image": "images/tactical.jpg",
+    "title": "Paramedic Tactical Unit",
+    "title_fr": "Unité tactique paramédicale",
+    "description": "The Paramedic Tactical Unit responds to high-risk situations that demand specialized skills and training.",
+    "description_fr": "L'Unité tactique paramédicale intervient dans des situations à haut risque qui exigent des compétences et une formation spécialisées.",
+    "facts": [],
+    "facts_fr": []
+  },
+  {
+    "id": "marine",
+    "image": "images/marine.jpg",
+    "title": "Paramedic Marine Unit",
+    "title_fr": "Unité maritime paramédicale",
+    "description": "The Paramedic Marine Unit provides water rescue and emergency care on lakes, rivers, and waterways.",
+    "description_fr": "L'Unité maritime paramédicale assure le sauvetage aquatique et les soins d'urgence sur les lacs, les rivières et les voies navigables.",
+    "facts": [],
+    "facts_fr": []
+  }
+]
