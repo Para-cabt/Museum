@@ -8,70 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  async function fetchGitHubData(station) {
-  try {
-
-    const response = await fetch("./stations/stations.json");
-
-    if (!response.ok) {
-      throw new Error("Unable to load station data");
-    }
-
-    const stations = await response.json();
-
-    const data = stations.find(
-      s => s.id === station.id
-    );
-
-    if (!data) {
-      throw new Error("Station not found");
-    }
-
-    modalBody.innerHTML = `
-      <h2>
-        <span
-          class="modal-color-accent"
-          style="background-color:${station.color}">
-        </span>
-        ${data.title}
-      </h2>
-
-      <div class="modal-body">
-        <p>${data.description}</p>
-
-        <h3>Did You Know?</h3>
-
-        <ul>
-          ${data.facts.map(f => `<li>${f}</li>`).join("")}
-        </ul>
-
-        ${
-          data.video
-            ? `
-              <p>
-                <a
-                  href="${data.video}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style/p>
-            `
-            : ""
-        }
-      </div>
-    `;
-
-  } catch (error) {
-
-    modalBody.innerHTML = `
-      <div class="modal-error">
-        Unable to load station information.
-      </div>
-    `;
-
-    console.error(error);
-  }
-}
-``
   :root{
     --night:#101a4d; --night-deep:#0a1136;
     --lime:#c8f531; --siren:#ff3b4e; --beacon:#2bb3ff;
@@ -152,6 +88,15 @@
   .patch svg{width:70px;height:70px;display:block}
   .patch svg *{stroke:rgba(245,248,255,.45);fill:none;stroke-width:5;
     stroke-linecap:round;stroke-linejoin:round;transition:stroke .35s ease}
+  .patch img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
+    box-shadow: inset 0 0 0 6px rgba(0,0,0,.15);
+    border:3px dashed rgba(245,248,255,.18);
+  }
 
   .badge h2{font-family:var(--display);font-size:1.15rem;line-height:1.15;margin:0 0 8px;
     color:rgba(245,248,255,.6);transition:color .3s ease}
@@ -288,18 +233,11 @@ const STATIONS = [
     hasLearnMore:true, githubTopic:"aed-use" },
   { id:"sar", name:"Search and Rescue", blurb:"Look, listen, and find.", color:"#c8f531",
     icon:`<path d="M40 50 a10 10 0 1 0 20 0 a10 10 0 1 0 -20 0 M50 40 v20 M40 50 h20"/><path d="M25 50 a25 25 0 1 0 50 0 a25 25 0 1 0 -50 0"/>` },
-  {  id:"truck", name:"Touch a Truck", blurb:"Climb in. Try the lights.", color:"#ffc53d",
-    icon:`<path d="M10 66 V38 h44 v28"/><path d="M54 46 h18 l14 14 v6 H54"/><circle cx="30" cy="72" r="8"/><circle cx="70" cy="72" r="8"/><path d="M26 24 h22"/><path d="M37 18 v6"/>` }
-},
-{id:"community-paramedic",name:"Community Paramedics",blurb:"Keeping people healthy at home and in the community.",color:"#7f5af0",icon:`
-<rect x="28" y="20" width="44" height="60" rx="6"/>
-<path d="M50 32 v24"/>
-<path d="M38 44 h24"/>
-<path d="M36 80 h28"/>
-`,
-hasLearnMore:true,
-githubTopic:"community-paramedicine"
-}
+  { id:"truck", name:"Touch a Truck", blurb:"Climb in. Try the lights.", color:"#ffc53d",
+    icon:`<path d="M10 66 V38 h44 v28"/><path d="M54 46 h18 l14 14 v6 H54"/><circle cx="30" cy="72" r="8"/><circle cx="70" cy="72" r="8"/><path d="M26 24 h22"/><path d="M37 18 v6"/>` },
+  { id:"community-paramedic", name:"Community Paramedics", blurb:"Keeping people healthy at home and in the community.", color:"#7f5af0",
+    icon:`<rect x="28" y="20" width="44" height="60" rx="6"/><path d="M50 32 v24"/><path d="M38 44 h24"/><path d="M36 80 h28"/>`,
+    hasLearnMore:true, githubTopic:"community-paramedicine" }
 ];
 
 /* Audio context setup */
@@ -457,13 +395,22 @@ learnModal.addEventListener("click", (e) => {
 /* ---------- build ---------- */
 STATIONS.forEach(s => {
   const btn = document.createElement("button");
-  btn.className="badge"; btn.type="button";
+  btn.className = "badge";
+  btn.type = "button";
   btn.style.setProperty("--c", s.color);
   btn.dataset.id = s.id;
-  btn.setAttribute("aria-pressed","false");
+  btn.setAttribute("aria-pressed", "false");
+  
+  // Prefer an image if provided, otherwise fallback to the SVG icon
+  let patchHtml;
+  if (s.image) {
+    patchHtml = `<div class="patch"><img src="${s.image}" alt="${s.name} photo" loading="lazy" onerror="this.style.display='none'"></div>`;
+  } else {
+    patchHtml = `<div class="patch"><svg viewBox="0 0 100 100" aria-hidden="true">${s.icon || ""}</svg></div>`;
+  }
   
   let html = `
-    <div class="patch"><svg viewBox="0 0 100 100" aria-hidden="true">${s.icon}</svg></div>
+    ${patchHtml}
     <h2>${s.name}</h2><p>${s.blurb}</p>
     <span class="status">Tap to collect</span>`;
   
@@ -474,13 +421,15 @@ STATIONS.forEach(s => {
   btn.innerHTML = html;
   btn.addEventListener("click", () => collect(s, btn));
   
-  // Add event listener for Learn More button
+  // Learn More button handler (stop propagation so main click doesn't fire)
   if (s.hasLearnMore) {
     const learnBtn = btn.querySelector(".learn-btn");
-    learnBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      openLearnModal(s);
-    });
+    if (learnBtn) {
+      learnBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openLearnModal(s);
+      });
+    }
   }
   
   board.appendChild(btn);
@@ -602,4 +551,3 @@ const dry = ac && ac.createGain(), wet = ac && ac.createGain();
 </script>
 </body>
 </html>
-v
