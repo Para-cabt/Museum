@@ -171,6 +171,40 @@
   .modal-loading{text-align:center;padding:40px 20px;color:rgba(200,245,49,.75)}
   .modal-error{color:var(--siren);padding:20px;background:rgba(255,59,78,.1);border-radius:12px;border-left:4px solid var(--siren)}
 
+  /* ---------- pin modal ---------- */
+  .pin-content{max-width:420px;text-align:center}
+  .pin-prompt{color:rgba(245,248,255,.8);line-height:1.5;font-size:.98rem;margin:0 0 22px}
+  .pin-input{width:100%;font-family:var(--util);font-size:1.6rem;letter-spacing:.5em;text-align:center;
+    padding:16px 14px;border-radius:14px;border:2px solid rgba(200,245,49,.4);
+    background:rgba(10,17,54,.7);color:var(--paper);outline:none;transition:.2s}
+  .pin-input:focus{border-color:var(--lime);box-shadow:0 0 0 4px rgba(200,245,49,.18)}
+  .pin-input.shake{animation:shake .4s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+  .pin-error{color:var(--siren);font-size:.9rem;min-height:1.3em;margin:12px 0 0;font-weight:600}
+  .pin-buttons{display:flex;gap:12px;justify-content:center;margin-top:22px}
+  .pin-submit{border-color:var(--lime);color:var(--lime)}
+  .pin-submit:hover{background:var(--lime);color:var(--night-deep);border-color:var(--lime)}
+  .pin-cancel{border-color:rgba(245,248,255,.3)}
+
+  /* ---------- results leaderboard ---------- */
+  .results-content{max-width:520px}
+  .results-content h2{margin-bottom:4px}
+  .results-sub{color:rgba(245,248,255,.6);font-size:.9rem;margin:0 0 20px;
+    font-family:var(--util);letter-spacing:.06em;text-transform:uppercase}
+  .results-list{list-style:none;counter-reset:rank;margin:0;padding:0}
+  .results-list li{counter-increment:rank;display:flex;align-items:center;gap:14px;
+    padding:12px 14px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.05)}
+  .results-list li::before{content:counter(rank);font-family:var(--display);font-size:1rem;
+    min-width:28px;height:28px;display:grid;place-items:center;border-radius:50%;
+    background:rgba(245,248,255,.12);color:var(--paper)}
+  .results-list li:nth-child(1)::before{background:var(--amber);color:var(--night-deep)}
+  .results-list li:nth-child(2)::before{background:#c8ccd6;color:var(--night-deep)}
+  .results-list li:nth-child(3)::before{background:#cd7f32;color:var(--night-deep)}
+  .results-dot{width:14px;height:14px;border-radius:50%;flex:0 0 auto}
+  .results-name{flex:1;font-weight:600;font-size:.98rem}
+  .results-count{font-family:var(--display);font-size:1.15rem;color:var(--lime)}
+  .results-loading{justify-content:center;color:rgba(200,245,49,.75)}
+
   @media (prefers-reduced-motion:reduce){
     *{animation:none !important;transition-duration:.01ms !important}
   }
@@ -219,50 +253,113 @@
   </div>
 </div>
 
+<!-- Modal for PIN entry -->
+<div class="modal" id="pinModal" role="dialog" aria-hidden="true">
+  <div class="modal-content pin-content">
+    <button class="modal-close" id="pinClose" aria-label="Close">&times;</button>
+    <h2 id="pinTitle">Enter Station PIN</h2>
+    <p id="pinPrompt" class="pin-prompt"></p>
+    <input id="pinInput" class="pin-input" type="text" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="PIN">
+    <p id="pinError" class="pin-error" aria-live="polite"></p>
+    <div class="pin-buttons">
+      <button class="btn pin-cancel" id="pinCancel">Cancel</button>
+      <button class="btn pin-submit" id="pinSubmit">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Results leaderboard (opens with ?results in the URL) -->
+<div class="modal" id="resultsModal" role="dialog" aria-hidden="true">
+  <div class="modal-content results-content">
+    <button class="modal-close" id="resultsClose" aria-label="Close">&times;</button>
+    <h2>Badge Leaderboard</h2>
+    <p class="results-sub">Total collections across all visitors</p>
+    <ol class="results-list" id="resultsList"><li class="results-loading">Loading…</li></ol>
+    <div class="pin-buttons">
+      <button class="btn" id="resultsRefresh">Refresh</button>
+    </div>
+  </div>
+</div>
+
 <p class="sr" aria-live="polite" id="announce"></p>
 
 <script>
 const STATIONS = [
-  { id:"bleed", name:"Stop the Bleed", name_fr:"Arrêter l'hémorragie", blurb:"Pack it, press it, wrap it.", blurb_fr:"Tamponnez, comprimez, bandez.", color:"#ff3b4e",
+  { id:"bleed", pin:"1001", name:"Stop the Bleed", name_fr:"Arrêter l'hémorragie", blurb:"Pack it, press it, wrap it.", blurb_fr:"Tamponnez, comprimez, bandez.", color:"#ff3b4e",
     icon:`<path d="M50 12 C50 12 24 42 24 60 a26 26 0 0 0 52 0 C76 42 50 12 50 12 Z"/><path d="M36 60 h28"/><path d="M50 46 v28"/>`,
     hasLearnMore:true },
-  { id:"cpr", name:"CPR", name_fr:"RCR", blurb:"Push hard, push fast, don't stop.", blurb_fr:"Poussez fort, poussez vite, ne vous arrêtez pas.", color:"#ff8a3d",
+  { id:"cpr", pin:"1002", name:"CPR", name_fr:"RCR", blurb:"Push hard, push fast, don't stop.", blurb_fr:"Poussez fort, poussez vite, ne vous arrêtez pas.", color:"#ff8a3d",
     icon:`<path d="M50 82 C50 82 16 60 16 38 A18 18 0 0 1 50 30 A18 18 0 0 1 84 38 C84 60 50 82 50 82 Z"/><path d="M22 48 h14 l7 -14 l9 26 l7 -12 h19"/>`,
     hasLearnMore:true },
-  { id:"aed", name:"Public Access Defibs", name_fr:"Défibrillateurs à accès public", blurb:"Find it, open it, follow the voice.", blurb_fr:"Trouvez-le, ouvrez-le, suivez la voix.", color:"#2bb3ff",
+  { id:"aed", pin:"1003", name:"Public Access Defibs", name_fr:"Défibrillateurs à accès public", blurb:"Find it, open it, follow the voice.", blurb_fr:"Trouvez-le, ouvrez-le, suivez la voix.", color:"#2bb3ff",
     icon:`<rect x="18" y="20" width="64" height="60" rx="10"/><path d="M56 32 L38 56 h13 l-7 18 l19 -26 H50 Z"/>`,
     hasLearnMore:true },
-  { id:"sar", name:"Search and Rescue", name_fr:"Recherche et sauvetage", blurb:"Look, listen, and find.", blurb_fr:"Regardez, écoutez, trouvez.", color:"#c8f531",
+  { id:"sar", pin:"1004", name:"Search and Rescue", name_fr:"Recherche et sauvetage", blurb:"Look, listen, and find.", blurb_fr:"Regardez, écoutez, trouvez.", color:"#c8f531",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"truck", name:"Touch a Truck", name_fr:"Touchez un camion", blurb:"Climb in. Try the lights.", blurb_fr:"Montez à bord. Essayez les gyrophares.", color:"#ffc53d",
+  { id:"truck", pin:"1005", name:"Touch a Truck", name_fr:"Touchez un camion", blurb:"Climb in. Try the lights.", blurb_fr:"Montez à bord. Essayez les gyrophares.", color:"#ffc53d",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"community-paramedic", name:"Community Paramedics", name_fr:"Paramédics communautaires", blurb:"Keeping people healthy at home and in the community.", blurb_fr:"Garder les gens en santé à la maison et dans la communauté.", color:"#7f5af0",
+  { id:"community-paramedic", pin:"1006", name:"Community Paramedics", name_fr:"Paramédics communautaires", blurb:"Keeping people healthy at home and in the community.", blurb_fr:"Garder les gens en santé à la maison et dans la communauté.", color:"#7f5af0",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"support", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
+  { id:"support", pin:"1007", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"regular-ops", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
+  { id:"regular-ops", pin:"1008", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"response-unit", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
+  { id:"response-unit", pin:"1009", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"logistic", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
+  { id:"logistic", pin:"1010", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"comm-officer", name:"Communication Officer", name_fr:"Agent des communications", blurb:"Connecting people, saving lives.", blurb_fr:"Relier les gens, sauver des vies.", color:"#f39c12",
+  { id:"comm-officer", pin:"1011", name:"Communication Officer", name_fr:"Agent des communications", blurb:"Connecting people, saving lives.", blurb_fr:"Relier les gens, sauver des vies.", color:"#f39c12",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"tactical", name:"Paramedic Tactical Unit", name_fr:"Unité tactique paramédicale", blurb:"High-risk, high-skill response.", blurb_fr:"Intervention à haut risque et haute compétence.", color:"#c0392b",
+  { id:"tactical", pin:"1012", name:"Paramedic Tactical Unit", name_fr:"Unité tactique paramédicale", blurb:"High-risk, high-skill response.", blurb_fr:"Intervention à haut risque et haute compétence.", color:"#c0392b",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"marine", name:"Paramedic Marine Unit", name_fr:"Unité maritime paramédicale", blurb:"Water rescue and marine response.", blurb_fr:"Sauvetage aquatique et intervention maritime.", color:"#3498db",
+  { id:"marine", pin:"1013", name:"Paramedic Marine Unit", name_fr:"Unité maritime paramédicale", blurb:"Water rescue and marine response.", blurb_fr:"Sauvetage aquatique et intervention maritime.", color:"#3498db",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true }
 ];
+
+/* =========================================================================
+   CLOUD COUNTER (Abacus - https://abacus.jasoncameron.dev)
+   Tallies how many times each badge is collected, across ALL visitors.
+   No API key needed. Counters auto-create on first hit.
+
+   TO RESET AFTER TESTING (two easy ways):
+   1) SIMPLE — just change COUNTER_NS below (e.g. "...-test" -> "...-live").
+      New namespace = a fresh set of counters starting at zero.
+   2) ADMIN KEY — create the counters once via /create to get an admin key,
+      then use the reset helper (see RESET INSTRUCTIONS at the bottom of file).
+   ========================================================================= */
+const COUNTER_BASE = "https://abacus.jasoncameron.dev";
+const COUNTER_NS   = "medicevent.ca-test";   // <-- change -test to -live for the real event
+const COUNTER_ON   = true;                    // set false to disable cloud counting entirely
+
+// Increment this badge's global tally by 1 (fire-and-forget; never blocks the UI)
+function bumpCounter(stationId){
+  if(!COUNTER_ON) return;
+  const url = `${COUNTER_BASE}/hit/${encodeURIComponent(COUNTER_NS)}/badge-${encodeURIComponent(stationId)}`;
+  fetch(url, { method:"GET", keepalive:true })
+    .catch(err => console.warn("counter hit failed:", err));  // offline? no problem, badge still awarded
+}
+
+// Read all badge tallies (used by the results screen)
+async function fetchCounts(){
+  const results = await Promise.all(STATIONS.map(async s => {
+    try{
+      const r = await fetch(`${COUNTER_BASE}/get/${encodeURIComponent(COUNTER_NS)}/badge-${encodeURIComponent(s.id)}`);
+      if(r.ok){ const j = await r.json(); return { s, value: j.value || 0 }; }
+    }catch(e){}
+    return { s, value: 0 };   // 404 = never collected yet
+  }));
+  return results.sort((a,b) => b.value - a.value);
+}
 
 /* ---------- language / i18n ---------- */
 let lang = "en";
@@ -278,7 +375,7 @@ const I18N = {
     soundOn: "Sound: on", soundOff: "Sound: off",
     startOver: "Start over", tapAgain: "Tap again to clear",
     finishTitle: "Congratulations! 🎉",
-    finishBody: "You've completed all thirteen stations and earned all your badges. Fantastic work!",
+    finishBody: "You've completed all thirteen stations and earned your Paramedic Museum Visit badge. Fantastic work!",
     badgeMonitor: "Badge monitor",
     beat: "beat", beats: "beats",
     langLabel: "Français",
@@ -287,7 +384,13 @@ const I18N = {
     boardCleared: "Board cleared. No badges collected.",
     loading: "Loading...",
     didYouKnow: "Did You Know?",
-    unableToLoad: "Unable to load station information."
+    unableToLoad: "Unable to load station information.",
+    pinTitle: "Enter Station PIN",
+    pinPrompt: n => `Enter the PIN posted at the ${n} station to collect this badge.`,
+    pinPlaceholder: "PIN",
+    pinSubmit: "Unlock",
+    pinCancel: "Cancel",
+    pinWrong: "Incorrect PIN. Try again."
   },
   fr: {
     eyebrow: "Visite du musée des paramédics",
@@ -300,7 +403,7 @@ const I18N = {
     soundOn: "Son : activé", soundOff: "Son : désactivé",
     startOver: "Recommencer", tapAgain: "Touchez encore pour effacer",
     finishTitle: "Félicitations! 🎉",
-    finishBody: "Vous avez terminé les treize stations et aquis tous vos insignes. Excellent travail!",
+    finishBody: "Vous avez terminé les treize stations et gagné votre insigne de la Visite du musée des paramédics. Excellent travail!",
     badgeMonitor: "Moniteur d'insignes",
     beat: "battement", beats: "battements",
     langLabel: "English",
@@ -309,7 +412,13 @@ const I18N = {
     boardCleared: "Tableau effacé. Aucun insigne collecté.",
     loading: "Chargement...",
     didYouKnow: "Le saviez-vous?",
-    unableToLoad: "Impossible de charger les informations de la station."
+    unableToLoad: "Impossible de charger les informations de la station.",
+    pinTitle: "Entrez le NIP de la station",
+    pinPrompt: n => `Entrez le NIP affiché à la station ${n} pour collecter cet insigne.`,
+    pinPlaceholder: "NIP",
+    pinSubmit: "Déverrouiller",
+    pinCancel: "Annuler",
+    pinWrong: "NIP incorrect. Réessayez."
   }
 };
 function t(key){ return I18N[lang][key]; }
@@ -387,13 +496,23 @@ soundBtn.addEventListener("click", () => {
   if(soundOn){ click(.25); bell(783.99, .04, 1, .26); }
 });
 
-/* ---------- storage ---------- */
+/* ---------- storage ----------
+   Persists this visitor's badges on their own device via localStorage,
+   so reopening or reloading the page keeps their collected badges.
+   Falls back to window.storage (artifact preview) and then in-memory. */
 async function load(){
+  // Standard browser storage (works on GitHub Pages / any real host)
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  // Fallback: artifact preview storage
   try{ if(window.storage){ const r = await window.storage.get(KEY,false); if(r&&r.value) return JSON.parse(r.value);} }catch(e){}
   return memoryOnly ? JSON.parse(memoryOnly) : [];
 }
 async function save(){
   const p = JSON.stringify([...earned]); memoryOnly = p;
+  try{ localStorage.setItem(KEY, p); }catch(e){}
   try{ if(window.storage) await window.storage.set(KEY,p,false); }catch(e){}
 }
 
@@ -555,7 +674,14 @@ function collect(s, btn){
     announce.textContent = t("alreadyCollected")(stationName(s));
     return;
   }
+  // Require the station PIN before awarding the badge
+  openPinModal(s, btn);
+}
+
+/* Awards the badge once the correct PIN has been entered */
+function award(s, btn){
   earned.add(s.id);
+  bumpCounter(s.id);   // tally this collection in the global cloud counter
   paint(btn, true);
   collectTone(earned.size);
   if(!calm){
@@ -568,6 +694,77 @@ function collect(s, btn){
   refresh(); save();
   if(done) setTimeout(fanfare, 380);
 }
+
+/* ---------- PIN modal ---------- */
+let pinStation = null, pinBtn = null;
+const pinModal = document.getElementById("pinModal");
+const pinInput = document.getElementById("pinInput");
+const pinError = document.getElementById("pinError");
+const pinPromptEl = document.getElementById("pinPrompt");
+
+function openPinModal(s, btn){
+  pinStation = s; pinBtn = btn;
+  document.getElementById("pinTitle").textContent = t("pinTitle");
+  pinPromptEl.textContent = t("pinPrompt")(stationName(s));
+  pinInput.placeholder = t("pinPlaceholder");
+  document.getElementById("pinSubmit").textContent = t("pinSubmit");
+  document.getElementById("pinCancel").textContent = t("pinCancel");
+  pinInput.value = "";
+  pinError.textContent = "";
+  pinModal.classList.add("show");
+  pinModal.setAttribute("aria-hidden","false");
+  setTimeout(() => pinInput.focus(), 50);
+}
+function closePinModal(){
+  pinModal.classList.remove("show");
+  pinModal.setAttribute("aria-hidden","true");
+  pinStation = null; pinBtn = null;
+}
+function submitPin(){
+  if(!pinStation) return;
+  const entered = pinInput.value.trim();
+  if(entered === String(pinStation.pin)){
+    const s = pinStation, btn = pinBtn;
+    closePinModal();
+    award(s, btn);
+  } else {
+    click(); thud();
+    pinError.textContent = t("pinWrong");
+    pinInput.classList.remove("shake"); void pinInput.offsetWidth; pinInput.classList.add("shake");
+    pinInput.select();
+  }
+}
+document.getElementById("pinSubmit").addEventListener("click", submitPin);
+document.getElementById("pinCancel").addEventListener("click", () => { click(); closePinModal(); });
+document.getElementById("pinClose").addEventListener("click", () => { click(); closePinModal(); });
+pinModal.addEventListener("click", (e) => { if(e.target === pinModal) closePinModal(); });
+pinInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") submitPin();
+  if(e.key === "Escape") closePinModal();
+});
+
+/* ---------- results leaderboard ---------- */
+const resultsModal = document.getElementById("resultsModal");
+const resultsList = document.getElementById("resultsList");
+async function showResults(){
+  resultsModal.classList.add("show");
+  resultsModal.setAttribute("aria-hidden","false");
+  resultsList.innerHTML = `<li class="results-loading">${t("loading")}</li>`;
+  const rows = await fetchCounts();
+  resultsList.innerHTML = rows.map(({s, value}) => `
+    <li>
+      <span class="results-dot" style="background:${s.color}"></span>
+      <span class="results-name">${stationName(s)}</span>
+      <span class="results-count">${value}</span>
+    </li>`).join("");
+}
+function closeResults(){
+  resultsModal.classList.remove("show");
+  resultsModal.setAttribute("aria-hidden","true");
+}
+document.getElementById("resultsClose").addEventListener("click", closeResults);
+document.getElementById("resultsRefresh").addEventListener("click", () => { click(); showResults(); });
+resultsModal.addEventListener("click", (e) => { if(e.target === resultsModal) closeResults(); });
 
 function paint(btn,on){
   btn.classList.toggle("earned",on);
@@ -691,7 +888,43 @@ function unlockAudio(){
   earned = new Set(await load());
   applyLanguage();   // builds badges (renderBadges) + sets all static text, then re-paints earned
   runScanner();
+  // Open the leaderboard automatically if the page is opened with ?results
+  if(location.search.includes("results")) showResults();
 })();
+
+/* =========================================================================
+   RESET INSTRUCTIONS (read me before the real event)
+   -------------------------------------------------------------------------
+   EASIEST RESET (no keys): open this file, find COUNTER_NS near the top and
+   change it, e.g. "medicevent.ca-test"  ->  "medicevent.ca-live".
+   Every badge then starts from zero. Do this once before the real event.
+
+   PROPER RESET-TO-ZERO (keeps the same namespace, needs a one-time admin key):
+   1) Create each counter once to obtain an admin key. In a browser, visit:
+        https://abacus.jasoncameron.dev/create/medicevent.ca-live/badge-bleed
+      The response {"admin_key":"73bdb650-580d-4c28-aade-626ed3c43507","key":"badge-bleed","namespace":"medicevent.ca-live","value":0}. SAVE IT — shown only once.
+      (You only need ONE admin key if you create all counters in one session;
+       Abacus ties the admin key to the namespace. Repeat /create for each
+       badge id: badge-bleed, badge-cpr, badge-aed, badge-sar, badge-truck,
+       badge-community-paramedic, badge-support, badge-regular-ops,
+       badge-response-unit, badge-logistic, badge-comm-officer,
+       badge-tactical, badge-marine.)
+   2) To reset a counter to zero later, send a POST with that admin key:
+        POST https://abacus.jasoncameron.dev/reset/medicevent.ca-live/badge-bleed
+        Header:  Authorization: Bearer YOUR_ADMIN_KEY
+      You can run all 13 resets from the browser console like this:
+
+        const NS = "medicevent.ca-live";
+        const ADMIN = "YOUR_ADMIN_KEY";
+        for (const s of STATIONS) {
+          await fetch(`https://abacus.jasoncameron.dev/reset/${NS}/badge-${s.id}`,
+            { method:"POST", headers:{ Authorization:"Bearer "+ADMIN } });
+        }
+        console.log("All counters reset to 0");
+
+   VIEW RESULTS anytime: open the site with ?results at the end of the URL,
+   e.g.  https://www.medicevent.ca/?results
+   ========================================================================= */
 </script>
 </body>
 </html>
