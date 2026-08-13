@@ -148,6 +148,27 @@
   .finish h3{font-family:var(--display);font-size:clamp(1.6rem,5vw,2.6rem);margin:0 0 10px}
   .finish p{margin:0 auto;max-width:40ch;font-size:1.1rem;font-weight:600}
 
+  /* ---------- siren buttons (revealed on completion) ---------- */
+  .sirens{margin-top:26px}
+  .siren-hint{font-family:var(--util);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    margin:0 0 14px;opacity:.8}
+  .siren-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .siren-btn{appearance:none;cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;
+    gap:8px;min-width:104px;padding:16px 20px;border-radius:20px;
+    border:3px solid var(--night-deep);background:rgba(10,17,54,.14);color:var(--night-deep);
+    font-family:var(--display);font-size:1rem;letter-spacing:.02em;
+    transition:transform .14s ease, background .2s ease}
+  .siren-btn:hover{transform:translateY(-3px);background:rgba(10,17,54,.22)}
+  .siren-btn:active{transform:translateY(1px)}
+  .siren-btn:focus-visible{outline:4px solid var(--night-deep);outline-offset:3px}
+  .siren-btn.playing{background:var(--night-deep);color:var(--lime);border-color:var(--night-deep)}
+  .siren-wave{display:flex;align-items:center;gap:4px;height:26px}
+  .siren-wave i{width:4px;height:8px;border-radius:2px;background:currentColor;opacity:.55}
+  .siren-btn.playing .siren-wave i{animation:siren-bounce .6s ease-in-out infinite}
+  .siren-btn.playing .siren-wave i:nth-child(2){animation-delay:.15s}
+  .siren-btn.playing .siren-wave i:nth-child(3){animation-delay:.3s}
+  @keyframes siren-bounce{0%,100%{height:8px}50%{height:24px}}
+
   footer{margin-top:40px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .btn{appearance:none;background:none;cursor:pointer;border:2px solid rgba(245,248,255,.25);
     border-radius:999px;color:rgba(245,248,255,.6);font-family:var(--util);font-size:12px;
@@ -268,6 +289,23 @@
   <section class="finish" id="finish" aria-live="polite">
     <h3 id="finishTitle">Congratulations! 🎉</h3>
     <p id="finishBody">You've completed all thirteen stations and earned your Paramedic Museum Visit badge. Fantastic work!</p>
+    <div class="sirens" id="sirens">
+      <p class="siren-hint" id="sirenHint">Tap a siren to play it</p>
+      <div class="siren-row">
+        <button class="siren-btn" id="sirenWail" data-siren="wail" aria-pressed="false">
+          <span class="siren-wave" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="siren-label" data-siren-label="wail">Wail</span>
+        </button>
+        <button class="siren-btn" id="sirenYelp" data-siren="yelp" aria-pressed="false">
+          <span class="siren-wave" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="siren-label" data-siren-label="yelp">Yelp</span>
+        </button>
+        <button class="siren-btn" id="sirenPhaser" data-siren="phaser" aria-pressed="false">
+          <span class="siren-wave" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="siren-label" data-siren-label="phaser">Phaser</span>
+        </button>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -332,43 +370,43 @@ var __Html5QrcodeLibrary__;(()=>{var t={449:function(t,e,r){!function(t){"use st
 </script>
 <script>
 const STATIONS = [
-  { id:"bleed", pin:"1001", name:"Stop the Bleed", name_fr:"Arrêter l'hémorragie", blurb:"Pack it, press it, wrap it.", blurb_fr:"Tamponnez, comprimez, bandez.", color:"#ff3b4e",
+  { id:"bleed", pin:"1001", image:"images/tourniquet.jpg", name:"Stop the Bleed", name_fr:"Arrêter l'hémorragie", blurb:"Pack it, press it, wrap it.", blurb_fr:"Tamponnez, comprimez, bandez.", color:"#ff3b4e",
     icon:`<path d="M50 12 C50 12 24 42 24 60 a26 26 0 0 0 52 0 C76 42 50 12 50 12 Z"/><path d="M36 60 h28"/><path d="M50 46 v28"/>`,
     hasLearnMore:true },
-  { id:"cpr", pin:"1002", name:"CPR", name_fr:"RCR", blurb:"Push hard, push fast, don't stop.", blurb_fr:"Poussez fort, poussez vite, ne vous arrêtez pas.", color:"#ff8a3d",
+  { id:"cpr", pin:"1002", image:"images/cpr.jfif", name:"CPR", name_fr:"RCR", blurb:"Push hard, push fast, don't stop.", blurb_fr:"Poussez fort, poussez vite, ne vous arrêtez pas.", color:"#ff8a3d",
     icon:`<path d="M50 82 C50 82 16 60 16 38 A18 18 0 0 1 50 30 A18 18 0 0 1 84 38 C84 60 50 82 50 82 Z"/><path d="M22 48 h14 l7 -14 l9 26 l7 -12 h19"/>`,
     hasLearnMore:true },
-  { id:"aed", pin:"1003", name:"Public Access Defibs", name_fr:"Défibrillateurs à accès public", blurb:"Find it, open it, follow the voice.", blurb_fr:"Trouvez-le, ouvrez-le, suivez la voix.", color:"#2bb3ff",
+  { id:"aed", pin:"1003", image:"images/aed.jfif", name:"Public Access Defibs", name_fr:"Défibrillateurs à accès public", blurb:"Find it, open it, follow the voice.", blurb_fr:"Trouvez-le, ouvrez-le, suivez la voix.", color:"#2bb3ff",
     icon:`<rect x="18" y="20" width="64" height="60" rx="10"/><path d="M56 32 L38 56 h13 l-7 18 l19 -26 H50 Z"/>`,
     hasLearnMore:true },
-  { id:"sar", pin:"1004", name:"Search and Rescue", name_fr:"Recherche et sauvetage", blurb:"Look, listen, and find.", blurb_fr:"Regardez, écoutez, trouvez.", color:"#c8f531",
+  { id:"sar", pin:"1004", image:"images/search-and-rescue.jpg", name:"Search and Rescue", name_fr:"Recherche et sauvetage", blurb:"Look, listen, and find.", blurb_fr:"Regardez, écoutez, trouvez.", color:"#c8f531",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"truck", pin:"1005", name:"Touch a Truck", name_fr:"Touchez un camion", blurb:"Climb in. Try the lights.", blurb_fr:"Montez à bord. Essayez les gyrophares.", color:"#ffc53d",
+  { id:"truck", pin:"1005", image:"images/truck.png", name:"Touch a Truck", name_fr:"Touchez un camion", blurb:"Climb in. Try the lights.", blurb_fr:"Montez à bord. Essayez les gyrophares.", color:"#ffc53d",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"community-paramedic", pin:"1006", name:"Community Paramedics", name_fr:"Paramédics communautaires", blurb:"Keeping people healthy at home and in the community.", blurb_fr:"Garder les gens en santé à la maison et dans la communauté.", color:"#7f5af0",
+  { id:"community-paramedic", pin:"1006", image:"images/Community_Paramedic.jpg", name:"Community Paramedics", name_fr:"Paramédics communautaires", blurb:"Keeping people healthy at home and in the community.", blurb_fr:"Garder les gens en santé à la maison et dans la communauté.", color:"#7f5af0",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"support", pin:"1007", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
+  { id:"support", pin:"1007", image:"images/support.jpg", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"regular-ops", pin:"1008", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
+  { id:"regular-ops", pin:"1008", image:"images/regular-ops.jpg", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"response-unit", pin:"1009", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
+  { id:"response-unit", pin:"1009", image:"images/response-unit.jpg", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"logistic", pin:"1010", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
+  { id:"logistic", pin:"1010", image:"images/logistic.jpg", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"comm-officer", pin:"1011", name:"Communication Officer", name_fr:"Agent des communications", blurb:"Connecting people, saving lives.", blurb_fr:"Relier les gens, sauver des vies.", color:"#f39c12",
+  { id:"comm-officer", pin:"1011", image:"images/comm-officer.jpg", name:"Communication Officer", name_fr:"Agent des communications", blurb:"Connecting people, saving lives.", blurb_fr:"Relier les gens, sauver des vies.", color:"#f39c12",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"tactical", pin:"1012", name:"Paramedic Tactical Unit", name_fr:"Unité tactique paramédicale", blurb:"High-risk, high-skill response.", blurb_fr:"Intervention à haut risque et haute compétence.", color:"#c0392b",
+  { id:"tactical", pin:"1012", image:"images/tactical.jpg", name:"Paramedic Tactical Unit", name_fr:"Unité tactique paramédicale", blurb:"High-risk, high-skill response.", blurb_fr:"Intervention à haut risque et haute compétence.", color:"#c0392b",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"marine", pin:"1013", name:"Paramedic Marine Unit", name_fr:"Unité maritime paramédicale", blurb:"Water rescue and marine response.", blurb_fr:"Sauvetage aquatique et intervention maritime.", color:"#3498db",
+  { id:"marine", pin:"1013", image:"images/marine.jpg", name:"Paramedic Marine Unit", name_fr:"Unité maritime paramédicale", blurb:"Water rescue and marine response.", blurb_fr:"Sauvetage aquatique et intervention maritime.", color:"#3498db",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true }
 ];
@@ -451,7 +489,9 @@ const I18N = {
     scanAlready: n => `${n} is already collected.`,
     scanUnknown: "That QR code isn't a valid station code.",
     scanNoCam: "Couldn't access the camera. Check permissions or use a PIN instead.",
-    scanStarting: "Starting camera…"
+    scanStarting: "Starting camera…",
+    sirenHint: "Tap a siren to play it",
+    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser"
   },
   fr: {
     eyebrow: "Visite du musée des paramédics",
@@ -488,7 +528,9 @@ const I18N = {
     scanAlready: n => `${n} est déjà collecté.`,
     scanUnknown: "Ce code QR n'est pas un code de station valide.",
     scanNoCam: "Impossible d'accéder à la caméra. Vérifiez les autorisations ou utilisez un NIP.",
-    scanStarting: "Démarrage de la caméra…"
+    scanStarting: "Démarrage de la caméra…",
+    sirenHint: "Touchez une sirène pour l'écouter",
+    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser"
   }
 };
 function t(key){ return I18N[lang][key]; }
@@ -560,10 +602,121 @@ function fanfare(){
 function thud(){ bell(196, 0, .5, .16); }
 function downRun(){ [659.25,523.25,392].forEach((f,i)=>bell(f, i*.1, .8, .18)); }
 
+/* ---------- siren synthesis ----------
+   Each siren is a sawtooth carrier whose pitch is swept between a low and high
+   frequency. The three types differ only in how fast the sweep cycles:
+     wail   = slow  (long rise and fall)
+     yelp   = fast  (rapid rise and fall)
+     phaser = very fast warble
+   Not Whelen's audio — these are original tones shaped to resemble each style. */
+const SIREN_SPECS = {
+  wail:   { lo: 650, hi: 1500, cycle: 4.4, shape: "triangle" },   // seconds per full up+down
+  yelp:   { lo: 700, hi: 1600, cycle: 0.65, shape: "triangle" },
+  phaser: { lo: 750, hi: 1650, cycle: 0.18, shape: "sawtooth" }
+};
+const activeSirens = {};   // type -> nodes, so we can stop it
+
+function startSiren(type){
+  if(!soundOn || !audio()) return false;
+  initAudio();
+  if(activeSirens[type]) return true;
+  const spec = SIREN_SPECS[type];
+  const t0 = ac.currentTime;
+
+  // Carrier oscillator (the siren pitch)
+  const osc = ac.createOscillator();
+  osc.type = "sawtooth";
+
+  // A little low-pass to take the harsh edge off
+  const lp = ac.createBiquadFilter();
+  lp.type = "lowpass"; lp.frequency.value = 3200; lp.Q.value = .3;
+
+  const gain = ac.createGain();
+  gain.gain.value = 0;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(.22, t0 + .08);   // gentle fade-in, museum-friendly level
+
+  osc.connect(lp); lp.connect(gain); gain.connect(dry); gain.connect(wet);
+
+  // Schedule the pitch sweep as a repeating shape for ~30s, then it auto-refreshes
+  const scheduleSweep = (startAt) => {
+    const half = spec.cycle / 2;
+    let t = startAt;
+    osc.frequency.setValueAtTime(spec.lo, t);
+    for(let i=0;i<Math.ceil(30/spec.cycle);i++){
+      if(spec.shape === "triangle"){
+        // smooth up then down
+        osc.frequency.linearRampToValueAtTime(spec.hi, t + half);
+        osc.frequency.linearRampToValueAtTime(spec.lo, t + spec.cycle);
+      } else {
+        // sawtooth-ish: quick ramp up, instant drop (phaser warble)
+        osc.frequency.linearRampToValueAtTime(spec.hi, t + spec.cycle*0.85);
+        osc.frequency.setValueAtTime(spec.lo, t + spec.cycle);
+      }
+      t += spec.cycle;
+    }
+    return t;
+  };
+  let scheduledUntil = scheduleSweep(t0);
+  osc.start(t0);
+
+  // Keep extending the sweep schedule while it plays
+  const refill = setInterval(() => {
+    if(!activeSirens[type]){ clearInterval(refill); return; }
+    if(ac.currentTime > scheduledUntil - 8){
+      scheduledUntil = scheduleSweep(scheduledUntil);
+    }
+  }, 3000);
+
+  activeSirens[type] = { osc, gain, refill };
+  return true;
+}
+
+function stopSiren(type){
+  const s = activeSirens[type];
+  if(!s) return;
+  const t = ac.currentTime;
+  try{
+    s.gain.gain.cancelScheduledValues(t);
+    s.gain.gain.setValueAtTime(s.gain.gain.value, t);
+    s.gain.gain.linearRampToValueAtTime(0, t + .12);   // fade out
+    s.osc.stop(t + .16);
+  }catch(e){}
+  clearInterval(s.refill);
+  delete activeSirens[type];
+}
+
+function stopAllSirens(){
+  Object.keys(activeSirens).forEach(stopSiren);
+  document.querySelectorAll(".siren-btn.playing").forEach(b => {
+    b.classList.remove("playing"); b.setAttribute("aria-pressed","false");
+  });
+}
+
+function toggleSiren(type, btn){
+  // Only one siren at a time — stop others first
+  if(activeSirens[type]){
+    stopSiren(type);
+    btn.classList.remove("playing"); btn.setAttribute("aria-pressed","false");
+    return;
+  }
+  stopAllSirens();
+  if(startSiren(type)){
+    btn.classList.add("playing"); btn.setAttribute("aria-pressed","true");
+  }
+}
+
 soundBtn.addEventListener("click", () => {
   soundOn = !soundOn;
   soundBtn.textContent = soundOn ? t("soundOn") : t("soundOff");
   if(soundOn){ click(.25); bell(783.99, .04, 1, .26); }
+  else { stopAllSirens(); }   // turning sound off stops any running siren
+});
+
+// Siren buttons (revealed only when all badges are collected)
+["sirenWail","sirenYelp","sirenPhaser"].forEach(id => {
+  const b = document.getElementById(id);
+  if(b) b.addEventListener("click", () => toggleSiren(b.dataset.siren, b));
 });
 
 /* ---------- storage ----------
@@ -748,6 +901,10 @@ function applyLanguage(){
   document.getElementById("finishTitle").textContent = t("finishTitle");
   document.getElementById("finishBody").textContent = t("finishBody");
   document.getElementById("monitorLabel").textContent = t("badgeMonitor");
+  document.getElementById("sirenHint").textContent = t("sirenHint");
+  document.querySelector('[data-siren-label="wail"]').textContent = t("sirenWail");
+  document.querySelector('[data-siren-label="yelp"]').textContent = t("sirenYelp");
+  document.querySelector('[data-siren-label="phaser"]').textContent = t("sirenPhaser");
   langBtn.textContent = t("langLabel");
   soundBtn.textContent = soundOn ? t("soundOn") : t("soundOff");
   resetBtn.textContent = armed ? t("tapAgain") : t("startOver");
@@ -1038,6 +1195,7 @@ resetBtn.addEventListener("click", () => {
     armTimer=setTimeout(disarm,3500); return;
   }
   clearTimeout(armTimer); disarm();
+  stopAllSirens();   // sirens live in the completion panel; stop them when clearing
   earned.clear();
   document.querySelectorAll(".badge").forEach(b=>paint(b,false));
   announce.textContent=t("boardCleared");
