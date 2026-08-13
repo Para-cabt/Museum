@@ -168,6 +168,9 @@
   .siren-btn.playing .siren-wave i:nth-child(2){animation-delay:.15s}
   .siren-btn.playing .siren-wave i:nth-child(3){animation-delay:.3s}
   @keyframes siren-bounce{0%,100%{height:8px}50%{height:24px}}
+  .finish-count{margin:20px 0 0;font-family:var(--util);font-size:13px;letter-spacing:.06em;
+    text-transform:uppercase;opacity:.85;min-height:1.2em}
+  .finish-count b{font-family:var(--display);font-size:16px}
 
   footer{margin-top:40px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .btn{appearance:none;background:none;cursor:pointer;border:2px solid rgba(245,248,255,.25);
@@ -288,7 +291,7 @@
 
   <section class="finish" id="finish" aria-live="polite">
     <h3 id="finishTitle">Congratulations! 🎉</h3>
-    <p id="finishBody">You've completed all thirteen stations and earned all of your Paramedic Museum Visit badges. Fantastic work! You've unlocked some sirens! </p>
+    <p id="finishBody">You've completed all thirteen stations and earned your Paramedic Museum Visit badge. Fantastic work!</p>
     <div class="sirens" id="sirens">
       <p class="siren-hint" id="sirenHint">Tap a siren to play it</p>
       <div class="siren-row">
@@ -305,6 +308,7 @@
           <span class="siren-label" data-siren-label="phaser">Phaser</span>
         </button>
       </div>
+      <p class="finish-count" id="finishCount"></p>
     </div>
   </section>
 
@@ -391,10 +395,10 @@ const STATIONS = [
   { id:"support", pin:"1007", image:"images/support.jpg", name:"Paramedic Support Unit", name_fr:"Unité de soutien paramédical", blurb:"Equipment, supplies, and support.", blurb_fr:"Équipement, fournitures et soutien.", color:"#e84c3d",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"regular-ops", pin:"1008", image:"images/regular.jpg", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
+  { id:"regular-ops", pin:"1008", image:"images/regular-ops.jpg", name:"Paramedic Regular Operations", name_fr:"Opérations paramédicales régulières", blurb:"Everyday emergency response.", blurb_fr:"Intervention d'urgence au quotidien.", color:"#1abc9c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
-  { id:"response-unit", pin:"1009", image:"images/PRU.png", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
+  { id:"response-unit", pin:"1009", image:"images/response-unit.jpg", name:"Paramedic Response Unit", name_fr:"Unité d'intervention paramédicale", blurb:"Rapid deployment, rapid response.", blurb_fr:"Déploiement rapide, intervention rapide.", color:"#e74c3c",
     icon:`<line x1="50" y1="25" x2="50" y2="75" stroke-width="4" stroke-linecap="round"/><line x1="25" y1="50" x2="75" y2="50" stroke-width="4" stroke-linecap="round"/>`,
     hasLearnMore:true },
   { id:"logistic", pin:"1010", image:"images/logistic.jpg", name:"Logistic Unit", name_fr:"Unité logistique", blurb:"Supplies, equipment, coordination.", blurb_fr:"Fournitures, équipement, coordination.", color:"#5dade2",
@@ -451,6 +455,51 @@ async function fetchCounts(){
   return results.sort((a,b) => b.value - a.value);
 }
 
+/* ---------- completion (siren-unlock) counter ----------
+   Counts how many people have finished all 13 badges and reached the sirens.
+   Guarded by localStorage so a reload or re-open by the same visitor
+   doesn't inflate the number. */
+const COMPLETION_KEY = "badges:csd2024:completed";   // per-device "already counted" flag
+let completionCache = null;
+
+function displayCompletionCount(){
+  const el = document.getElementById("finishCount");
+  if(el && completionCache != null) el.innerHTML = t("finishCount")(completionCache);
+}
+
+// Called once when the board first reaches 13/13 on this device
+function bumpCompletion(){
+  let already = false;
+  try{ already = localStorage.getItem(COMPLETION_KEY) === "1"; }catch(e){}
+
+  if(!COUNTER_ON){
+    completionCache = (completionCache || 0) + (already ? 0 : 1);
+    displayCompletionCount();
+    return;
+  }
+  const endpoint = already ? "get" : "hit";   // only increment the first time
+  const url = `${COUNTER_BASE}/${endpoint}/${encodeURIComponent(COUNTER_NS)}/completions`;
+  fetch(url, { method:"GET", keepalive:true })
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      if(j && j.value != null){ completionCache = j.value; displayCompletionCount(); }
+      if(!already){ try{ localStorage.setItem(COMPLETION_KEY, "1"); }catch(e){} }
+    })
+    .catch(err => {
+      completionCache = completionCache || 1; displayCompletionCount();
+      console.warn("completion counter failed:", err);
+    });
+}
+
+// Read the completion tally without incrementing (used on load if already complete)
+async function loadCompletionCount(){
+  if(!COUNTER_ON) return;
+  try{
+    const r = await fetch(`${COUNTER_BASE}/get/${encodeURIComponent(COUNTER_NS)}/completions`);
+    if(r.ok){ const j = await r.json(); completionCache = j.value || 0; displayCompletionCount(); }
+  }catch(e){}
+}
+
 /* ---------- language / i18n ---------- */
 let lang = "en";
 const I18N = {
@@ -465,7 +514,7 @@ const I18N = {
     soundOn: "Sound: on", soundOff: "Sound: off",
     startOver: "Start over", tapAgain: "Tap again to clear",
     finishTitle: "Congratulations! 🎉",
-    finishBody: "You've completed all thirteen stations and earned your Paramedic Museum Visit badge. Fantastic work! You have unlocked the Hidden Sirens!",
+    finishBody: "You've completed all thirteen stations and earned your Paramedic Museum Visit badge. Fantastic work!",
     badgeMonitor: "Badge monitor",
     beat: "beat", beats: "beats",
     langLabel: "Français",
@@ -491,7 +540,8 @@ const I18N = {
     scanNoCam: "Couldn't access the camera. Check permissions or use a PIN instead.",
     scanStarting: "Starting camera…",
     sirenHint: "Tap a siren to play it",
-    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser"
+    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser",
+    finishCount: n => n === 1 ? "<b>1</b> person has unlocked the sirens" : `<b>${n}</b> people have unlocked the sirens`
   },
   fr: {
     eyebrow: "Visite du musée des paramédics",
@@ -530,7 +580,8 @@ const I18N = {
     scanNoCam: "Impossible d'accéder à la caméra. Vérifiez les autorisations ou utilisez un NIP.",
     scanStarting: "Démarrage de la caméra…",
     sirenHint: "Touchez une sirène pour l'écouter",
-    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser"
+    sirenWail: "Wail", sirenYelp: "Yelp", sirenPhaser: "Phaser",
+    finishCount: n => n === 1 ? "<b>1</b> personne a débloqué les sirènes" : `<b>${n}</b> personnes ont débloqué les sirènes`
   }
 };
 function t(key){ return I18N[lang][key]; }
@@ -614,6 +665,31 @@ const SIREN_SPECS = {
   yelp:   { lo: 700, hi: 1600, cycle: 0.65, shape: "triangle" },
   phaser: { lo: 750, hi: 1650, cycle: 0.18, shape: "sawtooth" }
 };
+
+/* Maximum siren loudness (0 = silent, 1 = full). Lower this to make the sirens
+   quieter for the museum floor. A hard limiter (below) also caps peaks so the
+   sound can never exceed this level even if the device volume is maxed. */
+const SIREN_MAX_VOLUME = 0.12;
+
+let sirenLimiter = null;   // shared compressor/limiter all sirens pass through
+function getSirenLimiter(){
+  if(sirenLimiter) return sirenLimiter;
+  const comp = ac.createDynamicsCompressor();
+  comp.threshold.value = -24;   // start limiting early
+  comp.knee.value = 4;
+  comp.ratio.value = 20;        // hard limiting (20:1)
+  comp.attack.value = 0.002;
+  comp.release.value = 0.15;
+  // Final ceiling gain — pulls the compressor's makeup back down so the output
+  // never exceeds roughly SIREN_MAX_VOLUME, no matter how loud the source.
+  const ceiling = ac.createGain();
+  ceiling.gain.value = 0.5;
+  comp.connect(ceiling);
+  ceiling.connect(dry); ceiling.connect(wet);
+  sirenLimiter = comp;
+  return sirenLimiter;
+}
+
 const activeSirens = {};   // type -> nodes, so we can stop it
 
 function startSiren(type){
@@ -634,9 +710,10 @@ function startSiren(type){
   const gain = ac.createGain();
   gain.gain.value = 0;
   gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(.22, t0 + .08);   // gentle fade-in, museum-friendly level
+  gain.gain.linearRampToValueAtTime(SIREN_MAX_VOLUME, t0 + .08);   // capped, museum-friendly level
 
-  osc.connect(lp); lp.connect(gain); gain.connect(dry); gain.connect(wet);
+  // osc -> lowpass -> gain -> shared limiter (which connects to dry+wet)
+  osc.connect(lp); lp.connect(gain); gain.connect(getSirenLimiter());
 
   // Schedule the pitch sweep as a repeating shape for ~30s, then it auto-refreshes
   const scheduleSweep = (startAt) => {
@@ -905,6 +982,7 @@ function applyLanguage(){
   document.querySelector('[data-siren-label="wail"]').textContent = t("sirenWail");
   document.querySelector('[data-siren-label="yelp"]').textContent = t("sirenYelp");
   document.querySelector('[data-siren-label="phaser"]').textContent = t("sirenPhaser");
+  displayCompletionCount();   // keep the "# unlocked the sirens" line in the current language
   langBtn.textContent = t("langLabel");
   soundBtn.textContent = soundOn ? t("soundOn") : t("soundOff");
   resetBtn.textContent = armed ? t("tapAgain") : t("startOver");
@@ -946,7 +1024,7 @@ function award(s, btn){
   announce.textContent = t("collectedMsg")(stationName(s), earned.size);
   const done = earned.size === STATIONS.length;
   refresh(); save();
-  if(done) setTimeout(fanfare, 380);
+  if(done){ bumpCompletion(); setTimeout(fanfare, 380); }
 }
 
 /* ---------- PIN modal ---------- */
@@ -1238,6 +1316,7 @@ function unlockAudio(){
   applyLanguage();   // builds badges (renderBadges) + sets all static text, then re-paints earned
   runScanner();
   loadEarnedCounts();   // fetch "# people collected this" for badges already earned
+  if(earned.size === STATIONS.length) loadCompletionCount();   // returning to a finished board
   // Open the leaderboard automatically if the page is opened with ?results
   if(location.search.includes("results")) showResults();
 })();
