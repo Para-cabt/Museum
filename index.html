@@ -150,6 +150,9 @@
   .finish{margin-top:44px;padding:34px 26px;text-align:center;border-radius:28px;display:none;
     background:linear-gradient(100deg,var(--siren),var(--amber) 45%,var(--lime));color:var(--night-deep)}
   .finish.show{display:block;animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
+  .finish-img{display:block;width:100%;max-width:320px;margin:0 auto 22px;
+    border-radius:20px;border:4px solid var(--night-deep);
+    box-shadow:0 10px 24px rgba(10,17,54,.35);background:#fff}
   .finish h3{font-family:var(--display);font-size:clamp(1.6rem,5vw,2.6rem);margin:0 0 10px}
   .finish p{margin:0 auto;max-width:40ch;font-size:1.1rem;font-weight:600}
 
@@ -300,6 +303,7 @@
   <main class="board" id="board"></main>
 
   <section class="finish" id="finish" aria-live="polite">
+    <img class="finish-img" id="finishImg" src="code.png" alt="" onerror="this.style.display='none'">
     <h3 id="finishTitle">Congratulations! 🎉</h3>
     <p id="finishBody">You've completed all thirteen stations and earned all your Paramedic Museum badges. Fantastic work! You've unlocked the hidden siren buttons!</p>
     <div class="sirens" id="sirens">
